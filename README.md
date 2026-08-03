@@ -35,23 +35,31 @@ All are 256x256 RGBA, trimmed to the artwork and centred with a small margin. Th
 clients' own marks as published, unlike the `build_v2.py` monogram tiles, which are brand-colored
 squares The Well composes rather than client artwork.
 
-## Box shape follows the artwork (read before swapping a logo)
+## File shape follows the artwork (read before swapping a logo)
 
-**Aspect ratio decides which box a logo gets, so measure the art, do not eyeball it.**
+**Aspect ratio decides both the file format and the box, so measure the art, do not eyeball it.**
 
-- **Square-ish marks (up to about 2.3:1) get a 56x56 box**, art capped at 82%.
-- **Wide lockups (2.5:1 and up) get a 112x56 box**, art capped at 92%. Five clients are here:
-  presidio 7.1, ig 4.3, grabber 4.3, itonda 4.2, studio41 2.6.
+| Mark | File | Box |
+|---|---|---|
+| Square-ish, under 2.5:1 | **256x256**, art centred in transparent padding | 56x56, art at 82% |
+| Wide lockup, 2.5:1 and up | **TIGHT-CROPPED** to the art, natural aspect, ~512px long edge | 112x56, art at 92% |
 
-The wide box exists because a square box scales a wide mark to the box HEIGHT: Presidio landed at
-about 6px tall and was unreadable. The 2:1 box makes width the binding constraint instead. Added
-2026-08-03 after three wide wordmarks arrived in a row.
+Currently wide: presidio 7.3, ig 4.4, grabber 4.3, itonda 4.1, studio41 2.6. The Great Escape at 2.3
+sits just under and stays square.
+
+**Padding a wide mark onto a square canvas silently defeats the wide box.** A browser sizes the
+*image element*, so a 1:1 canvas binds on height no matter how wide the box is. Measured: Presidio
+drew 45.9x6.5px in a 56x56 box and **45.9x6.5px in a 112x56 box, identical**, until the padding came
+off. Tight-cropped it becomes 103x14.2px, 2.2x taller, and Grabber's "Construction Products" and
+Studio41's "HOME DESIGN SHOWROOM" taglines go from unreadable to legible. This is why the whole set
+was not simply saved 256x256: that convention is right for square marks and actively harmful for wide
+ones.
 
 The wide/square split lives in `WIDE_LOGOS` in the Client Context Tool's `Index.html`, and the build
 scripts for the hub tiles and the dashboard cards read it from there. **If you replace a logo with art
-of a different shape, re-measure and update that list**, or the mark sits in the wrong box: a square
-mark in a wide box is stranded in whitespace, and a wide mark in a square box is the illegibility
-problem above.
+of a different shape, re-measure, re-export at the right shape, and update that list.** Wrong pairings
+both fail: a square mark in a wide box is stranded in whitespace, a wide mark in a square box is
+illegible.
 
 Judge legibility by rendering at TRUE pixel size and magnifying with nearest-neighbour. Rendering the
 tile at 4x and eyeballing that flatters a fine wordmark and will tell you it is fine when it is not.
