@@ -19,6 +19,7 @@ variant reads on both the light cards and the plum masthead.
 
 | slug | file | source |
 |---|---|---|
+| `wwt` | `wwt.png` | Dropbox `WWT/_Corporate/2021 NEW BRAND ASSETS/Logos/WWT_Monogram/RGB/Color/WWT_Monogram_RGB_Color.svg`, client-provided |
 | `okta` | `okta.png` | Dropbox `Okta/01. Provided by Okta/Logos/Okta Logos/Okta_Aura_CMYK_Black.png`, client-provided |
 | `itonda` | `itonda.png` | Dropbox `Itonda/ITD2601/05_Deliverables/Logo/Itonda Name Only.svg` (The Well designed it) |
 | `grabber` | `grabber.png` | Dropbox `Grabber/2026/7. Images & Resources/Grabber logo 2026/Grabber Logo DinCond-BLK-txt.png`, the 2026 asset |
@@ -28,9 +29,20 @@ variant reads on both the light cards and the plum masthead.
 | `mission-investment-fund` | `mif.png` | mif.elca.org quad mark (every lockup on their site is reversed white) |
 | `optiver` | `optiver.png` | optiver.com triangle mark |
 
-All eight are 256x256 RGBA, trimmed to the artwork and centred with a small margin. These are the
-clients' own marks as published, unlike the four above, which `build_v2.py` composes as
-brand-colored monogram tiles.
+All are 256x256 RGBA, trimmed to the artwork and centred with a small margin. These are the
+clients' own marks as published, unlike the `build_v2.py` monogram tiles, which are brand-colored
+squares The Well composes rather than client artwork.
+
+**Updated 2026-08-03 (later):** `wwt.png` replaced with WWT's official monogram, supplied by Jeff from
+Dropbox, superseding the `build_v2.py` red "WWT" tile. Rendered from the brand SVG at 4x and
+downsampled so the diagonals stay clean. It is 1.98:1, so it no longer fills the tile the way the
+composed square did, but it is crisp and legible down to 40px.
+
+`wwt.png` is consumed in three places, all of them "this row is WWT" markers, so the official mark is
+right in all three: the Client Context Tool (cards, wizard masthead, hub tiles, validation
+dashboard), the Agency AI Operations dashboard, and the tools-portal preview. Despite the favicons
+section above listing it, no app actually passes `wwt.png` to `setFaviconUrl` any more, so nothing
+changes in any browser tab. That stale listing is worth cleaning up.
 
 **Updated 2026-08-03:** `okta.png` and `grabber.png` replaced with the client-provided files Jeff
 supplied from Dropbox, superseding the versions sourced from their public sites. Okta is now the Aura
