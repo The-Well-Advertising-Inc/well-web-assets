@@ -26,7 +26,8 @@ variant reads on both the light cards and the plum masthead.
 | `itonda` | `itonda.png` | Dropbox `Itonda/ITD2601/05_Deliverables/Logo/Itonda Name Only.svg` (The Well designed it) |
 | `grabber` | `grabber.png` | Dropbox `Grabber/2026/7. Images & Resources/Grabber logo 2026/Grabber Logo DinCond-BLK-txt.png`, the 2026 asset |
 | `studio41` | `studio41.png` | Google's cached wordmark; studio41.com hard-blocks fetches with 429 |
-| `shirley-ryan-abilitylab` | `sralab.png` | sralab.org chevron mark |
+| `shirley-ryan-abilitylab` | `sralab.png` | client-provided `logos_AbilityLab.webp`, the full two-ink lockup (2.9:1); replaced the sralab.org chevron mark |
+| `the-great-escape` | `greatescape-transparent.png` | Dropbox `The Great Escape/Logos/tgelogo.png`, client-provided (2.5:1) |
 | `greatwater-garages` | `greatwater.png` | greatwater360autocare.com gear mark (their lockup is white-only) |
 | `mission-investment-fund` | `mif.png` | mif.elca.org quad mark (every lockup on their site is reversed white) |
 | `optiver` | `optiver.png` | optiver.com triangle mark |
@@ -44,8 +45,9 @@ squares The Well composes rather than client artwork.
 | Square-ish, under 2.5:1 | **256x256**, art centred in transparent padding | 56x56, art at 82% |
 | Wide lockup, 2.5:1 and up | **TIGHT-CROPPED** to the art, natural aspect, ~512px long edge | 112x56, art at 92% |
 
-Currently wide: presidio 7.3, ig 4.4, grabber 4.3, itonda 4.1, studio41 2.6. The Great Escape at 2.3
-sits just under and stays square.
+Currently wide: presidio 7.3, ig 4.4, grabber 4.3, itonda 4.1, studio41 2.6, greatescape 2.5. The
+threshold sits at **2.2** because that is where the real gap in this set falls: the next mark down is
+wwt at 2.0, then greatwater at 1.8.
 
 **Padding a wide mark onto a square canvas silently defeats the wide box.** A browser sizes the
 *image element*, so a 1:1 canvas binds on height no matter how wide the box is. Measured: Presidio
@@ -63,6 +65,20 @@ illegible.
 
 Judge legibility by rendering at TRUE pixel size and magnifying with nearest-neighbour. Rendering the
 tile at 4x and eyeballing that flatters a fine wordmark and will tell you it is fine when it is not.
+
+## Client files that arrive on an opaque white background
+
+Several do (The Great Escape's `tgelogo.png` is RGB, Shirley Ryan's `.webp` is RGB). **Un-multiply the
+white rather than keying it out**: keying leaves a white halo on every anti-aliased edge.
+
+    alpha = (255 - min(r,g,b)) / T          # T = the 92nd percentile distance from white
+    rgb   = (pixel - (1-alpha)*255) / alpha # recover the ink behind the blend
+
+This inverts the compositing exactly, verified both times by recompositing over white and diffing
+against the original: max channel error 0 for Shirley Ryan, and for The Great Escape 0.28 mean at
+native resolution (a handful of off-tone blue pixels in the source, not a halo). For a single-ink logo
+the simpler form works, alpha from the R channel against the known ink. Do the comparison at NATIVE
+resolution: diffing after a resize measures LANCZOS, not your un-matte.
 
 **Updated 2026-08-03 (Presidio):** `presidio.png` replaced with Presidio's official blue wordmark,
 supplied by Jeff from Dropbox, superseding the `build_v2.py` blue "P" tile. Note the source is named
